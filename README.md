@@ -1,6 +1,6 @@
-#List
+# List
 
-##simple example
+## simple example
 * **create list**  
 ```cpp
 List<int>* list= cons(1,cons(3,cons(2, List<int>::empty)));
