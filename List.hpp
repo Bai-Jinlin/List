@@ -31,16 +31,24 @@ namespace l {
             strm << head(xs) << ']';
             return strm.str();
         };
+
     };
 
     template<typename T>
-    inline T &head(List<T> *xs) { return xs->key; };
+    inline T &head(List<T> *xs) {
+        if (!xs) throw std::length_error("range overflow");
+        return xs->key;
+    };
+
 
     template<typename T>
-    inline List<T> *tail(List<T> *xs) { return xs->next; };
+    inline List<T> *tail(List<T> *xs) {
+        if (!xs) throw std::length_error("range overflow");
+        return xs->next;
+    };
 
     template<typename T>
-    List<T> *cons(T x, List<T> *xs) {
+    inline List<T> *cons(T x, List<T> *xs) {
         List<T> *lst = new List<T>;
         lst->key = x;
         lst->next = xs;
@@ -97,7 +105,7 @@ namespace l {
     template<typename T>
     List<T> *init(List<T> *xs) {
         if (!xs) throw std::logic_error("List is empty");
-        List<T> *ys = nullptr;
+        List<T> *ys = List<T>::empty;
         for (; tail(xs); xs = tail(xs))
             ys = append(ys, head(xs));
         return ys;
@@ -166,37 +174,10 @@ namespace l {
             return false;
     }
 
-
-//    template<typename T>
-//    void deleteList(List<T> *xs) {
-//        List<T> *c = xs;
-//        List<T> *t = nullptr;
-//        for (; c; c = t) {
-//            t = tail(c);
-//            c->next = nullptr;
-//            delete c;
-//        }
-//    }
-//
-//    template<typename T>
-//    void deleteListF(List<T> *xs) {
-//        if (!xs) {
-//            deleteListF(tail(xs));
-//            delete xs;
-//        } else
-//            return;
-//    }
-
     template<typename T>
     List<T> *replicate_F(int n, T x) {
         if (n <= 0) return List<T>::empty;
         return cons(x, replicate_F(n - 1, x));
-    }
-
-    template<typename T>
-    List<T> *reverse_F(List<T> *xs) {
-        if (xs) return append(reverse_F(tail(xs)), head(xs));
-        return List<T>::empty;
     }
 
     template<typename T>
@@ -213,17 +194,43 @@ namespace l {
         }
         return h;
     }
-//
-//    template<typename T>
-//    void beautifulPrint(List<T> *xs) {
-//        std::cout << '[';
-//        if (!xs) {
-//            std::cout << ']';
-//            return;
-//        }
-//        for (; tail(xs); xs = tail(xs))
-//            std::cout << head(xs) << ',';
-//        std::cout << head(xs) << ']' << std::endl;
-//    }
+
+    template<typename T>
+    List<T> *reverse_F(List<T> *xs) {
+        if (xs) return append(reverse_F(tail(xs)), head(xs));
+        return List<T>::empty;
+    }
+
+/*    template<typename T>
+    void deleteList(List<T> *xs) {
+        List<T> *c = xs;
+        List<T> *t = nullptr;
+        for (; c; c = t) {
+            t = tail(c);
+            c->next = nullptr;
+            delete c;
+        }
+    }
+
+    template<typename T>
+    void deleteList_F(List<T> *xs) {
+        if (!xs) {
+            deleteListF(tail(xs));
+            delete xs;
+        } else
+            return;
+    }
+
+    template<typename T>
+    void beautifulPrint(List<T> *xs) {
+        std::cout << '[';
+        if (!xs) {
+            std::cout << ']';
+            return;
+        }
+        for (; tail(xs); xs = tail(xs))
+            std::cout << head(xs) << ',';
+        std::cout << head(xs) << ']' << std::endl;
+    }*/
 }
 #endif

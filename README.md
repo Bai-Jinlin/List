@@ -13,18 +13,18 @@ l===[1,4,3]
 基本原语
 * **cons**用于把数据追加到一个列表的头
 ```cpp
-List<int> *t1=cons(5,l);
-t1===[5,1,4,3]
+List<int> *c1=cons(5,l);
+c1===[5,1,4,3]
 ```
 * **head**用于获取列表的第一个元素
 ```cpp
-int k=head(l);
-k===1;
+int h1=head(l);
+h1===1;
 ```
 * **tail**用于获取列表第一个元素之后的列表
 ```cpp
-List<int> *t=tail(l);
-t==[4,3]
+List<int> *t1=tail(l);
+t1==[4,3]
 ```
 
 
