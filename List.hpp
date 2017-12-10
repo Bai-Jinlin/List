@@ -34,6 +34,9 @@ namespace l {
 
     };
 
+    /// @brief
+    /// @param xs
+    /// @return
     template<typename T>
     inline T &head(List<T> *xs) {
         if (!xs) throw std::length_error("range overflow");
@@ -64,6 +67,13 @@ namespace l {
     }
 
     template<typename T>
+    T getAt_F(List<T> *xs, int n) {
+        if (!xs) throw std::length_error("range overflow");
+        if (n <= 0) return head(xs);
+        return getAt_F(tail(xs), n - 1);
+    }
+
+    template<typename T>
     T &getAtR(List<T> *xs, int n) {
         List<T> *h = xs;
         while (xs && n--)
@@ -74,14 +84,14 @@ namespace l {
     }
 
     template<typename T>
-    T &getAtR_F(List<T> *xs, int n) {
+    T getAtR_F(List<T> *xs, int n) {
         std::function<List<T> *(int, List<T> *)> drop = [&drop](int nn, List<T> *xs) -> List<T> * {
             if (nn)
                 if (!tail(xs)) throw std::length_error("range overflow");
                 else return drop(nn - 1, tail(xs));
             return xs;
         };
-        std::function<int &(List<T> *, List<T> *)> examine = [&examine](List<T> *l, List<T> *r) -> int & {
+        std::function<int(List<T> *, List<T> *)> examine = [&examine](List<T> *l, List<T> *r) -> int & {
             if (tail(r)) return examine(tail(l), tail(r));
             return head(l);
         };
@@ -91,8 +101,28 @@ namespace l {
 
     template<typename T>
     List<T> *setAt_F(List<T> *xs, int n, T x) {
+        if (!xs) throw std::length_error("range overflow");
+        if (n <= 0) return cons(x, tail(xs));
+        return cons(head(xs), setAt_F(tail(xs), n - 1, x));
+    }
+
+    template<typename T>
+    List<T> *insert(List<T> *xs, int n, T x) {
+        List<T> *h, *p;
+        if (n == 0)
+            return cons(x, xs);
+        for (h = xs; xs && n; --n, xs = tail(xs))
+            p = xs;
+        if (n) throw std::length_error("range overflow");
+        p->next = cons(x, xs);
+        return h;
+    }
+
+    template<typename T>
+    List<T> *insert_F(List<T> *xs, int n, T x) {
+        if (n && !xs) throw std::length_error("range overflow");
         if (n <= 0) return cons(x, xs);
-        return cons(head(xs), setAt_F(xs, n - 1, x));
+        return cons(head(xs), insert_F(tail(xs), n - 1, x));
     }
 
     template<typename T>
@@ -144,6 +174,15 @@ namespace l {
     }
 
     template<typename T>
+    List<T> *copy(List<T> *xs) {
+        List<T> *ret = List<T>::empty;
+        for (; xs; xs = tail(xs)) {
+            ret = cons(head(xs), ret);
+        }
+        return ret;
+    }
+
+    template<typename T>
     List<T> *copy_F(List<T> *xs) {
         if (xs) return cons(head(xs), copy_F(tail(xs)));
         return List<T>::empty;
@@ -152,7 +191,7 @@ namespace l {
     template<typename T>
     List<T> *concat_F(List<T> *ll, List<T> *lr) {
         if (ll) return cons(head(ll), concat_F(tail(ll), lr));
-        return copyF(lr);
+        return copy_F(lr);
     }
 
     template<typename T>
