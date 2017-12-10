@@ -7,7 +7,7 @@
 #include <string>
 #include <exception>
 
-namespace l {
+namespace ds {
     template<typename T>
     struct List {
         T key;
@@ -34,9 +34,6 @@ namespace l {
 
     };
 
-    /// @brief
-    /// @param xs
-    /// @return
     template<typename T>
     inline T &head(List<T> *xs) {
         if (!xs) throw std::length_error("range overflow");
@@ -239,37 +236,5 @@ namespace l {
         if (xs) return append(reverse_F(tail(xs)), head(xs));
         return List<T>::empty;
     }
-
-/*    template<typename T>
-    void deleteList(List<T> *xs) {
-        List<T> *c = xs;
-        List<T> *t = nullptr;
-        for (; c; c = t) {
-            t = tail(c);
-            c->next = nullptr;
-            delete c;
-        }
-    }
-
-    template<typename T>
-    void deleteList_F(List<T> *xs) {
-        if (!xs) {
-            deleteListF(tail(xs));
-            delete xs;
-        } else
-            return;
-    }
-
-    template<typename T>
-    void beautifulPrint(List<T> *xs) {
-        std::cout << '[';
-        if (!xs) {
-            std::cout << ']';
-            return;
-        }
-        for (; tail(xs); xs = tail(xs))
-            std::cout << head(xs) << ',';
-        std::cout << head(xs) << ']' << std::endl;
-    }*/
 }
 #endif
